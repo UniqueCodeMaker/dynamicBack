@@ -1,6 +1,7 @@
 require("dotenv").config(); // load .env variables
 const { Router } = require("express"); // import router from express
 const DynamicModel = require("../models/serve");
+const homeModel = require('../models/home')
 const auth_userModel = require("../models/auth")
 const router = Router();
 const auth_user = require('../helpers/userModel')
@@ -85,9 +86,26 @@ router.get("/serveall", async (req, res) => {
 
     console.log("testres", testres)
     res.status(200).send({
-        "data":testres,
+        "data":testres, 
         "status":true
     })
+
+});
+
+
+router.post("/home", async (req, res) => {
+    const { title, url, meta_tag, upload_image, description } = req.body
+    console.log(title, url, upload_image, description, req.body)
+    const homedata = await new homeModel({
+        title,
+        url,
+        meta_tag,
+        upload_image: "https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+        description
+    })
+    homeModel(homedata).save()
+    // res.send("done updated", testres)
+    res.status(200).send("done")
 
 });
 
