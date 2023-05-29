@@ -94,20 +94,25 @@ router.get("/serveall", async (req, res) => {
 
 
 router.post("/home", async (req, res) => {
-    const { title, url, meta_tag, upload_image, description } = req.body
-    console.log(title, url, upload_image, description, req.body)
-    const homedata = await new homeModel({
-        title,
-        url,
-        meta_tag,
-        upload_image: "https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-        description
+    console.log("req", req.body)
+    req.body.upload_image  = "https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+    const response = await homeModel.findByIdAndUpdate("64738f10e14a81d8fb238c87", {$set:req.body})
+    console.log("response", response)
+    res.status(200).send({
+        "Status" : 200,
+        data : "Updated Successfully"
     })
-    homeModel(homedata).save()
-    // res.send("done updated", testres)
-    res.status(200).send("done")
-
+  
 });
 
+router.get("/homedata", async (req, res) => {
+    const response = await homeModel.findById("64738f10e14a81d8fb238c87")
+    console.log("response", response)
+    res.status(200).send({
+        "Status" : 200,
+        data : response
+    })
+  
+});
 
 module.exports = router
